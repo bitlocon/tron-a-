@@ -1,0 +1,521 @@
+ağ {
+  tür = ana ağ
+  # tür = test ağı
+}
+
+depolamak {
+  # Kalıcı verileri depolamak için dizin
+  db.versiyon = 2,
+  db.engine = "LEVELDB",
+  db.sync = yanlış,
+  db.directory = "veritabanı",
+  index.directory = "dizin",
+  transHistory.switch = "açık",
+  # Bu 14 veritabanının yapılandırmasını özelleştirebilirsiniz:
+
+  # hesap, hesap dizini, varlık sorunu, blok, blok dizini,
+  # block_KDB, eşler, özellikler, son blok, trans,
+  # utxo, oylar, tanık, tanık_programı.
+
+  # Aksi takdirde, db yapılandırmaları varsayılan olarak kalacak ve veriler
+  # "çıktı dizini" veya "-d" ("--çıkış dizini") tarafından ayarlanan yol.
+
+  # Dikkat: isim, ayarlanması gereken zorunlu bir alandır !!!
+  özellikler = [
+    // {
+    // isim = "hesap",
+    // yol = "storage_directory_test",
+    // createIfMissing = doğru,
+    // paranoyakKontroller = doğru,
+    // doğrulamaChecksums = true,
+    // sıkıştırmaTürü = 1, // snappy ile sıkıştırılmış
+    // blokBoyutu = 4096, // 4 KB = 4 * 1024B
+    // writeBufferSize = 10485760, // 10 MB = 10 * 1024 * 1024 B
+    // önbellekBoyutu = 10485760, // 10 MB = 10 * 1024 * 1024B
+    // maxOpenFiles = 100
+    // },
+    // {
+    // name = "hesap dizini",
+    // yol = "storage_directory_test",
+    // createIfMissing = doğru,
+    // paranoyakKontroller = doğru,
+    // doğrulamaChecksums = true,
+    // sıkıştırmaTürü = 1, // snappy ile sıkıştırılmış
+    // blokBoyutu = 4096, // 4 KB = 4 * 1024B
+    // writeBufferSize = 10485760, // 10 MB = 10 * 1024 * 1024 B
+    // önbellekBoyutu = 10485760, // 10 MB = 10 * 1024 * 1024B
+    // maxOpenFiles = 100
+    // },
+  ]
+
+  needToUpdateAsset = doğru
+
+  //dbsettings, depolama aracı olarak rocksdb kullanıldığında gereklidir (db.version=2 ve db.engine="ROCKSDB").
+  //Her öğenin anlamını net bir şekilde bilmiyorsanız, onu değiştirmemenizi şiddetle tavsiye ederiz.
+  dbSettings = {
+    seviyeSayısı = 7
+    //compactThreads = 32
+    blok boyutu = 64 // n * KB
+    maxBytesForLevelBase = 256 // n * MB
+    maxBytesForLevelMultiplier = 10
+    level0FileNumCompactionTrigger = 4
+    hedefFileSizeBase = 256 // n * MB
+    hedefFileSizeMultiplier = 1
+  }
+
+  //depolama aracı olarak rock db kullanıldığında yedek ayarlar (db.version=2 ve db.engine="ROCKSDB").
+  //yedekleme eklentisini kullanmak istiyorsanız, lütfen yukarıda db.version=2 ve db.engine="ROCKSDB" ayarını onaylayın.
+  yedekleme = {
+    enable = false // yedekleme eklentisinin etkinleştirilip etkinleştirilmediğini gösterir
+    propPath = "prop.properties" // hangi bak dizininin geçerli olduğunu kaydedin
+    bak1path = "bak1/database" // uygulamanın beklenmedik bir şekilde durmasını önlemek için iki yedek dizini ayarlamanız gerekir (örn. kill -9).
+    bak2path = "bak2/veritabanı"
+    frekans = 10000 // işlenen her 10000 blokta bir yedekleme db'sini gösterir.
+  }
+}
+
+düğüm.keşif = {
+  etkinleştir = doğru
+  kalıcı = doğru
+  bağlama.ip = ""
+  harici.ip = boş
+}
+
+düğüm.yedekleme {
+  bağlantı noktası = 10001
+
+  # önceliğim, her üye farklı öncelik kullanmalı
+  öncelik = 8
+
+  # eşin ip listesi, benimkini içeremez
+  üyeler = [
+    #"ip",
+    # "ip"
+  ]
+}
+
+düğüm {
+  # sağlamlık düğümü için güven düğümü
+  # trustNode = "ip: bağlantı noktası"
+  trustNode = "127.0.0.1:50051"
+
+  # uzantı api'sini herkese açık veya açık olarak gösterin
+  walletExtensionApi = doğru
+
+  dinle.bağlantı noktası = 18888
+
+  bağlantı.zaman aşımı = 2
+
+  tcpNettyWorkThreadNum = 0
+
+  udpNettyWorkThreadNum = 1
+
+  # Doğrulama işareti iş parçacığı sayısı, varsayılan kullanılabilir İşlemciler / 2
+  # valideSignThreadNum = 16
+
+  bağlantı Faktörü = 0,3
+  aktif Bağlantı Faktörü = 0,1
+
+  maxActiveNodes = 30
+
+  maxActiveNodesWithSameIp = 2
+
+  maxHttpConnectNumber = 50
+
+  min Katılım Oranı = 15
+
+  zenTokenId = 1000016
+
+  # eş veri aktarımını kontrol edin, bağlantı kesme faktörü
+  bağlantı kesmeNumberFactor = 0.4
+  maxConnectNumberFactor = 0,8
+  alıcıTcpMinDataLength = 2048
+  isOpenFullTcpDisconnect = doğru
+
+  p2p {
+    sürüm = 201910292
+  }
+
+  aktif = [
+    # Her durumda aktif bağlantı kurun
+    # Örnek girişler:
+    # "ip: bağlantı noktası",
+    # "ip: bağlantı noktası"
+    "47.90.214.183:18888"
+  ]
+
+  pasif = [
+    # Her durumda pasif kabul bağlantısı
+    # Örnek girişler:
+    # "ip: bağlantı noktası",
+    # "ip: bağlantı noktası"
+  ]
+
+  hızlıİleri = [
+  ]
+
+  http {
+    fullNodePort = 8090
+    katılık Portu = 8091
+  }
+
+  rpc {
+    bağlantı noktası = 50051
+    #solidityPort = 50061
+    # gRPC iş parçacığı sayısı, varsayılan kullanılabilir İşlemciler / 2
+    # iplik = 16
+
+    # Gelen her bağlantı için izin verilen maksimum eşzamanlı arama sayısı
+    # maxConcurrentCallsPerConnection =
+
+    # HTTP/2 akış kontrol penceresi, varsayılan 1MB
+    # akışKontrol Penceresi =
+
+    # Bağlantı, incelikle sonlandırılacak olandan daha uzun süre boşta kalıyor
+    maxConnectionIdleInMillis = 60000
+
+    # Daha uzun süren bağlantı, incelikle sonlandırılacak
+    # maxConnectionAgeInMillis =
+
+    # Sunucuda alınmasına izin verilen maksimum mesaj boyutu, varsayılan 4MB
+    # maxMessageSize =
+
+    # Alınmasına izin verilen maksimum başlık listesi boyutu, varsayılan 8192
+    # maxHeaderListSize =
+
+    # İşlemler ancak etkin bağlantı sayısına ulaşıldığında yayınlanabilir.
+    minEtkili Bağlantı = 1
+  }
+
+  # FullNode'daki sağlam iş parçacığı sayısı.
+  # Solidity rpc ve http arayüzüne erişim zaman aşımına uğradıysa, iş parçacığı sayısını artırabilir,
+  # Varsayılan değer, makinenin işlemci çekirdeği sayısıdır.
+  #solidity.threads = 8
+
+  # Üreten blok aralığının maksimum yüzdesini (varsayılan %75) sınırlar
+  # diğer işlemleri gerçekleştirmek için yeterli zaman sağlamak için, örneğin yayın bloğu
+  #blockProducedTimeOut = 75
+
+  # Ağ katmanından maksimum işlem sayısını (varsayılan 700) sınırlar
+  # netMaxTrxPerSaniye = 700
+}
+
+## hız sınırlayıcı yapılandırması
+oran.sınırlayıcı = {
+  # Her api'ye belirli bir oran sınırı stratejisi ayarlanabilir. Üç strateji desteklenir：GlobalPreemptibleAdapter、IPQPSRateLimiterAdapte、QpsRateLimiterAdapter
+  # GlobalPreemptibleAdapter: izin, öncelikli kaynak sayısıdır, her müşteri bir kaynak uygulamalıdır
+  # istekte bulunmadan önce ve yanıtı otomatik olarak aldıktan sonra kaynağı serbest bırakın. izin bir Tamsayı olmalıdır.
+  # QpsRateLimiterAdapter: qps, sunucu tarafından desteklenen bir saniyede ortalama istek sayısıdır, Double veya Integer olabilir.
+  # IPQPSRateLimiterAdapter: QpsRateLimiterAdapter'a benzer şekilde qps, Double veya Integer olabilir.
+  # Ayarlamazsanız, "varsayılan strateji" ayarlanır. "Varsayılan strateji", QpsRateLimiterAdapter'a dayalıdır, qps, 10000 olarak ayarlanır.
+  #
+  # Örnek girişler:
+  #
+  http = [
+    # {
+    # component = "GetNowBlockServlet",
+    # strateji = "GlobalPreemptibleAdapter",
+    # paramString = "izin ver=1"
+    #},
+
+    # {
+    # bileşen = "GetAccountServlet",
+    # strateji = "IPQPSRateLimiterAdapter",
+    # paramString = "qps=1"
+    #},
+
+    # {
+    # component = "ListWitnessesServlet",
+    # strateji = "QpsRateLimiterAdapter",
+    # paramString = "qps=1"
+    # }
+  ],
+
+  rpc = [
+    # {
+    # component = "protocol.Wallet/GetBlockByLatestNum2",
+    # strateji = "GlobalPreemptibleAdapter",
+    # paramString = "izin ver=1"
+    #},
+
+    # {
+    # component = "protocol.Wallet/GetAccount",
+    # strateji = "IPQPSRateLimiterAdapter",
+    # paramString = "qps=1"
+    #},
+
+    # {
+    # component = "protocol.Wallet/ListWitnesses",
+    # strateji = "QpsRateLimiterAdapter",
+    # paramString = "qps=1"
+    #},
+  ]
+
+}
+
+
+tohum.düğüm = {
+  # Çekirdek düğümlerin listesi
+  # Çekirdek düğümler kararlı tam düğümlerdir
+  # misal:
+  # ip.list = [
+  # "ip: bağlantı noktası",
+  # "ip: bağlantı noktası"
+  # ]
+  ip.list = [
+    "47.90.214.183:18888",
+  ]
+}
+
+oluşum.blok = {
+  # Yedek bakiye
+  varlıklar = [
+    {
+      hesapAdı = "Zion"
+      accountType = "AssetIssue"
+      adres = "TMWXhuxiT1KczhBxCseCDDsrhmpYGUcoA9"
+      bakiye = "99000000000000000"
+    },
+    {
+      hesapAdı = "Güneş"
+      accountType = "AssetIssue"
+      adres = "TN21Wx2yoNYiZ7znuQonmZMJnH5Vdfxu78"
+      bakiye = "99000000000000000"
+    },
+    {
+      hesapAdı = "Karadelik"
+      accountType = "AssetIssue"
+      adres = "TDPJULRzVtzVjnBmZvfaTcTNQ2tsVi6XxQ"
+      bakiye = "-9223372036854775808"
+    }
+  ]
+
+  tanıklar = [
+    {
+      adres: TD23EqH3ixYMYh8CMXKdHyQWjePi3KQvxV,
+      url = "http://GR1.com",
+      Oy Sayısı = 100000026
+    },
+    {
+      adres: TCm4Lz1uP3tQm3jzpwFTG6o5UvSTA2XEHc,
+      url = "http://GR2.com",
+      Oy Sayısı = 100000025
+    },
+    {
+      adres: TTgDUgREiPBeY3iudD5e2eEibE4v4CE8C9,
+      url = "http://GR3.com",
+      Oy Sayısı = 100000024
+    },
+    {
+      adres: TFVDe7kMEmb8EuUxxp42kocQY1fFY727WS,
+      url = "http://GR4.com",
+      Oy Sayısı = 100000023
+    },
+    {
+      adres: TY4NSjctzTchHkhaCskVc5zQtnX9s1uxAX,
+      url = "http://GR5.com",
+      Oy Sayısı = 100000022
+    },
+    {
+      adres: TWSMPrm6aizvsJmPnjMB7x3UExJfRhyQhd,
+      url = "http://GR6.com",
+      Oy Sayısı = 100000021
+    },
+    {
+      adres: TKwLkSaCvqqpAB44qaHGTohCTCFoYw7ecy,
+      url = "http://GR7.com",
+      Oy Sayısı = 100000020
+    },
+    {
+      adres: TDsYmm1St9r4UZebDGWBcTMtfYTw9YX5h4,
+      url = "http://GR8.com",
+      Oy Sayısı = 100000019
+    },
+    {
+      adres: TFEQbWAPxhbUr1P14y9UJBUZo3LgtdqTS7,
+      url = "http://GR9.com",
+      Oy Sayısı = 100000018
+    },
+    {
+      adres: TCynAi8tb7UWP7uhLv6fe971KLm2KT8tcs,
+      url = "http://GR10.com",
+      oy Sayısı = 100000017
+    },
+    {
+      adres: TC2YsLp4rzrt3AbeN3EryoSywrBjEUVCq3,
+      url = "http://GR11.com",
+      Oy Sayısı = 100000016
+    },
+    {
+      adres: THxMKH1uaL5FpURujkQR7u2sNZ2n5PSsiH,
+      url = "http://GR12.com",
+      Oy Sayısı = 100000015
+    },
+    {
+      adres: TWbzgoHimDcXWy19ts1An8bxA4JKjcYHeG,
+      url = "http://GR13.com",
+      Oy Sayısı = 100000014
+    },
+    {
+      adres: TW2LmXnVCEAxuVtQN8gZR1ixT5PNm4QLft,
+      url = "http://GR14.com",
+      Oy Sayısı = 100000013
+    },
+    {
+      adres: TVuqk4rYYVHVA6j6sSEnaLexhhoQhN8nyZ,
+      url = "http://GR15.com",
+      Oy Sayısı = 100000012
+    },
+    {
+      adres: TVMZu5ptZPhhkZ3Kaagkq35FmyuKNvUKJV,
+      url = "http://GR16.com",
+      Oy Sayısı = 100000011
+    },
+    {
+      adres: TFDHT8PqUrL2Bd8DeysSiHHBAEMidZgkhx,
+      url = "http://GR17.com",
+      Oy Sayısı = 100000010
+    },
+    {
+      adres: TVqz5Bj3M1uEenaSsw2NnXvTWChPj6K3hb,
+      url = "http://GR18.com",
+      Oy Sayısı = 100000009
+    },
+    {
+      adres: TSt8YNpARJkhdMdEV4C7ajH1tFHpZWzF1T,
+      url = "http://GR19.com",
+      Oy Sayısı = 100000008
+    },
+    {
+      adres: TTxWDjEb3Be1Ax8BCvK48cnaorZofLq2C9,
+      url = "http://GR20.com",
+      oy Sayısı = 100000007
+    },
+    {
+      adres: TU5T838YtyZtEQKpnXEdRz3d8hJn6WHhjw,
+      url = "http://GR21.com",
+      Oy Sayısı = 100000006
+    },
+    {
+      adres: TRuSs1MpL3o2hzhU8r6HLC7WtDyVE9hsF6,
+      url = "http://GR22.com",
+      Oy Sayısı = 100000005
+    },
+    {
+      adres: TYMCoCZyAjWkWdUfEHg1oZQYbLKev282ou,
+      url = "http://GR23.com",
+      Oy Sayısı = 100000004
+    },
+    {
+      adres: TQvAyGATpLZymHbpeaRozJCKqSeRWVNhCJ,
+      url = "http://GR24.com",
+      Oy Sayısı = 100000003
+    },
+    {
+      adres: TYDd9nskbhJmLLNoe4yV2Z1SYtGjNa8wyg,
+      url = "http://GR25.com",
+      Oy Sayısı = 100000002
+    },
+    {
+      adres: TS5991Geh2qeHtw46rskpJyn6hFNbuZGGc,
+      url = "http://GR26.com",
+      Oy Sayısı = 100000001
+    },
+    {
+      adres: TKnn5MBnmXXeKdu9dxKVfKk4n1YdCeSRGr,
+      url = "http://GR27.com",
+      Oy Sayısı = 100000000
+    }
+  ]
+
+  zaman damgası = "0" #2017-8-26 12:00:00
+
+  parentHash = "0xe58f33f9baf9305dc6f82b9f1934ea8f0ade2defb951258d50167028c780351f"
+}
+
+// İsteğe bağlı.Varsayılan boştur.
+// Tanık hesabı, WickPermission ayarını yaptığında kullanılır.
+// Boş olmadığında, localWitnessAccountAddress tanık hesabının adresini temsil eder,
+// ve localwitness, tanik hesabındaki WittPermissionAddress'in özel anahtarıyla yapılandırılır.
+// Boş olduğunda, yerel tanık, tanık hesabının özel anahtarıyla yapılandırılır.
+
+//localWitnessAccountAddress =
+
+#localwitnesskeystore = [
+# "localwitnesskeystore.json"
+#]
+
+blok = {
+  needSyncCheck = yanlış
+  bakımZamanAralığı = 600000
+  teklifin Bitiş Süresi = 600000 //
+}
+
+# İşlem referans bloğu, varsayılan "head" dir, "solid" olarak yapılandırmak TaPos hatasını önleyebilir
+# trx.reference.block = "head" // head;katı;
+
+# Bu özellik, süresi dolan işlemin oluşturulmasından sonraki milisaniye sayısını ayarlar, varsayılan değer 60000'dir.
+# trx.expiration.timeInMilliseconds = 60000
+
+sanal = {
+  destekSabit = doğru
+  minZaman Oranı = 0.0
+  maxZamanOranı = 5.0
+  saveInternalTx = doğru
+
+  # Nadir durumlarda, belirtilen maksimum yürütme süresi (varsayılan 10(ms)) içinde olacak işlemler yeniden yürütülür ve paketlenir
+  #uzunÇalışmaSüresi = 10
+}
+
+komite = {
+  allowCreationOfContracts = 0 //mainnet:0 (komite tarafından sıfırlanır),test:1
+  allowAdaptiveEnergy = 0 //mainnet:0 (komite tarafından sıfırlanır),test:1
+}
+
+olay.abone ol = {
+  yerli = {
+    useNativeQueue = true // true ise, yerel mesaj sırasını kullanın, aksi takdirde olay eklentisini kullanın.
+    bağlantı noktası = 5555 // bağlantı noktası
+    sendqueuelength = 1000 //maksimum gönderme sırası uzunluğu
+  }
+
+  yol = "" // eklentinin mutlak yolu
+  server = "" // olay tetikleyicilerini almak için hedef sunucu adresi
+  dbconfig = "" // dbname|kullanıcıadı|şifre
+  sözleşmeParse = doğru,
+  konular = [
+    {
+      triggerName = "block" // blok tetikleyici, değer değiştirilemez
+      etkinleştir = yanlış
+      topic = "block" // eklenti konusu, değer değiştirilebilir
+    },
+    {
+      triggerName = "işlem"
+      etkinleştir = yanlış
+      konu = "işlem"
+    },
+    {
+      triggerName = "sözleşme olayı"
+      etkinleştir = yanlış
+      konu = "sözleşme olayı"
+    },
+    {
+      triggerName = "sözleşme günlüğü"
+      etkinleştir = yanlış
+      konu = "sözleşme günlüğü"
+    }
+  ]
+
+  filtre = {
+    fromblock = "" // değer "", "erken" veya sorgulanan aralığın başlangıcı olarak belirtilen bir blok numarası olabilir
+    toblock = "" // değer "", "last" veya sorgulanan aralığın sonu olarak belirtilen bir blok numarası olabilir
+    sözleşmeAdresi = [
+      "" // abone olmak istediğiniz sözleşme adresi, "" olarak ayarlanmışsa, herhangi bir sözleşme adresiyle sözleşme günlükleri/olayları alacaksınız.
+    ]
+
+    sözleşme Konusu = [
+      "" // abone olmak istediğiniz sözleşme konusu, "" olarak ayarlanmışsa, herhangi bir sözleşme konusuyla sözleşme günlükleri/olayları alacaksınız.
+    ]
+  }
+}
+  
